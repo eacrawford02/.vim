@@ -26,9 +26,13 @@ if !has("gui_running")
 endif
 colorscheme solarized
 
-" Automatically apply changes made to ~/.vimrc when saved to disk. Sources file 
-" opened in current buffer (~/.vimrc) after writing buffer to ~/.vimrc
-autocmd BufWritePost $MYVIMRC so %
+" Automatically apply changes made to (g)vimrc when saved to disk. Sources file 
+" opened in current buffer ((g)vimrc) after writing buffer to config file
+augroup AutoSrc
+  autocmd!
+  autocmd BufWritePost $MYVIMRC so %
+  autocmd BufWritePost $MYGVIMRC so %
+augroup END
 
 " Map terminal keycodes associated with alt key chords. This is terminal
 " dependent. Run `sed -n l` do determine the escape characters your specific
@@ -63,29 +67,58 @@ nnoremap <silent>; :let @/=""<cr>
 vnoremap <Tab> >
 vnoremap <S-Tab> <
 
-" Terminal window toggle function
-let g:termBuf = 0
-let g:termWin = 0
+" Initialize terminal toggle variables
+function! TermInit()
+  " Tab page variables allow for more than one terminal window across multiple
+  " tab pages
+  let t:termBuf = 0
+  let t:termWin = 0
+endfunction
 
+" Terminal window toggle function
 function! ToggleTerm(height)
-  if win_gotoid(g:termWin)
-    hide
+  if win_gotoid(t:termWin)
+    " If the terminal window is not the last window, hide it and return the
+    " cursor to the previous window. Otherwise, quit Vim
+    if winnr('$') > 1
+      hide
+      execute winnr('#') .. "wincmd w"
+    else
+      q!
+    endif
   else
     " Note that at no point will :startinsert work in terminal mode
     split new
     execute "resize " .. a:height
     " Try re-opening previous terminal buffer
     try
-      execute "buffer " .. g:termBuf
+      execute "buffer " .. t:termBuf
     " If it does not exist, open a new terminal buffer
     catch
       terminal ++curwin ++kill=term
-      let g:termBuf = bufnr("$")
+      let t:termBuf = bufnr("$")
       set nonumber
     endtry
-    let g:termWin = win_getid()
+    let t:termWin = win_getid()
   endif
 endfunction
+
+" Terminal window close function
+function! CloseTerm()
+  " If the terminal window and only one other window are open, hide the terminal
+  " window
+  if win_gotoid(t:termWin) && winnr('$') == 2
+    hide
+  endif
+endfunction
+
+augroup TermWrapper
+  autocmd!
+  " Initialize terminal toggle variables when entering Vim/opening new tabpage
+  autocmd VimEnter,TabNew * :call TermInit()
+  " Close the terminal window when quitting the last window (exiting Vim)
+  autocmd QuitPre * :call CloseTerm()
+augroup END
 
 " Terminal window maps
 nnoremap <A-c> :call ToggleTerm(12)<cr>
