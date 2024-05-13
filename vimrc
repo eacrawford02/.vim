@@ -124,3 +124,17 @@ augroup END
 nnoremap <A-c> :call ToggleTerm(12)<cr>
 tnoremap <Esc> <C-\><C-N> " Return to normal mode
 tnoremap <A-c> <C-W>:call ToggleTerm(12)<cr>
+
+" File tree config
+let g:fern#default_hidden=1 " Display hidden files
+let g:fern#disable_drawer_tabpage_isolation=1 " All tabs share drawer
+
+augroup FernStartup
+  autocmd!
+  autocmd FileType fern set nonumber
+  " Open file-tree by default in project directory
+  autocmd VimEnter ~/VivadoProjects/* ++nested Fern . -reveal=% -drawer -toggle
+augroup END
+
+" File tree toggle map
+nnoremap <A-t> :Fern . -reveal=% -drawer -toggle<cr>
