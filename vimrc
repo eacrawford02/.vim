@@ -132,8 +132,6 @@ let g:fern#disable_drawer_tabpage_isolation=1 " All tabs share drawer
 augroup FernStartup
   autocmd!
   autocmd FileType fern set nonumber
-  " Open file-tree by default in project directory
-  autocmd VimEnter ~/VivadoProjects/* ++nested Fern . -reveal=% -drawer -toggle
 augroup END
 
 " File tree toggle map

@@ -7,3 +7,7 @@ set clipboard^=unnamed,unnamedplus
 
 set guioptions-=m " Turn off menubar
 set guioptions-=T " Turn off toolbar
+
+" Turn of cursor blinking in normal mode and decrease blink rate in insert mode
+set guicursor+=n:blinkon0
+set guicursor+=i-ci:ver25-Cursor/lCursor-blinkwait700-blinkon530-blinkoff530
