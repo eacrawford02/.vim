@@ -136,3 +136,36 @@ augroup END
 
 " File tree toggle map
 nnoremap <A-t> :Fern . -reveal=% -drawer -toggle<cr>
+
+" Configure Git signs plugin to improve performance
+set updatetime=100 " More responsive Git sign column updates
+let g:signify_skip = {"vcs": {"allow": ["git"]}} " Only track git repositories
+
+let g:signify_sign_change='~'
+
+" Match signcolumn background colour to line number background colour. Note that
+" the color values will need to be changed if the solarized colorscheme is no
+" longer used
+if &background == "dark"
+  highlight SignColumn ctermbg=235 guibg=#073642
+else
+  highlight SignColumn ctermbg=187 guibg=#eee8d5
+endif
+
+augroup GitHunk
+  autocmd!
+  " 'User' autocommand is manually invoked by the Signify plugin. Necessary if
+  " we want a trigger event that is defined in a plugin (i.e., 'user' defined)
+  autocmd User SignifyHunk call s:ShowCurrentHunk()
+augroup END
+
+function! s:ShowCurrentHunk()
+  let h=sy#util#get_hunk_stats()
+  if !empty(h)
+    echo printf("[Hunk %d/%d]", h.current_hunk, h.total_hunks)
+  endif
+endfunction
+
+nmap <Leader>j <Plug>(signify-next-hunk)
+nmap <Leader>k <Plug>(signify-prev-hunk)
+nnoremap <Leader>d :SignifyHunkDiff<cr>

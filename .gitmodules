@@ -4,3 +4,6 @@
 [submodule "pack/vim-fern-git-status/start/vim-fern-git-status"]
 	path = pack/vim-fern-git-status/start/vim-fern-git-status
 	url = https://github.com/lambdalisue/vim-fern-git-status.git
+[submodule "pack/vim-signify/start/vim-signify"]
+	path = pack/vim-signify/start/vim-signify
+	url = https://github.com/mhinz/vim-signify.git
