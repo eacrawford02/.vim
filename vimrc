@@ -67,6 +67,12 @@ nnoremap <silent>; :let @/=""<cr>
 vnoremap <Tab> >
 vnoremap <S-Tab> <
 
+" Insert mode autocompletion shortcuts
+inoremap <C-F> <C-X><C-F> " Autocomplete filenames
+inoremap <C-D> <C-X><C-D> " Autocomplete macros
+inoremap <C-L> <C-X><C-L> " Autocomplete lines
+inoremap <C-I> <C-X><C-I> " Autocomplete keywords in included files
+
 " Initialize terminal toggle variables
 function! TermInit()
   " Tab page variables allow for more than one terminal window across multiple
