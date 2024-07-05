@@ -95,6 +95,10 @@ function! ToggleTerm(height)
       execute "buffer " .. t:termBuf
     " If it does not exist, open a new terminal buffer
     catch
+      " If Vim complains about a job still running when trying to quit after a
+      " terminal window has been opened, a stronger signal argument will need to
+      " be provided for the terminal kill option. See :help job_stop() for a
+      " list of values
       terminal ++curwin ++kill=term
       let t:termBuf = bufnr("$")
       set nonumber
@@ -145,7 +149,8 @@ let g:signify_sign_change='~'
 
 " Match signcolumn background colour to line number background colour. Note that
 " the color values will need to be changed if the solarized colorscheme is no
-" longer used
+" longer used. Run ./pack/vim-signify/start/vim-signify/showcolors.bash to print
+" the cterm colours
 if &background == "dark"
   highlight SignColumn ctermbg=235 guibg=#073642
 else
