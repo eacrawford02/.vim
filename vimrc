@@ -12,6 +12,35 @@ set signcolumn=auto
 set textwidth=80
 set colorcolumn=81
 
+" Status line configuration
+let g:currentmode={
+  \ 'n'	     : "  NORMAL ",
+  \ 'v'      : "  VISUAL ",
+  \ 'V'      : "  VISUAL LINE ",
+  \ "\<C-V>" : "  VISUAL BLOCK ",
+  \ 'i'	     : "  INSERT ",
+  \ 'R'      : "  REPLACE ",
+  \ "Rv"     : "  VREPLACE ",
+  \ 'c'      : "  COMMAND ",
+\}
+
+set noshowmode
+set laststatus=2
+set statusline=
+" Different text highlighting for normal mode vs. other modes
+set statusline+=%#CursorColumn#%{mode()=='n'?g:currentmode[mode()]:''}
+set statusline+=%#Pmenu#%{mode()!='n'?g:currentmode[mode()]:''}
+set statusline+=%#LineNr# " Filepath highlight colour
+set statusline+=%f " Path to file in current buffer
+set statusline+=\ %m " Indicate if file is modified
+set statusline+=%= " Right align following items
+set statusline+=%#CursorColumn#
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " Vim/file encoding
+set statusline+=\ [%{&fileformat}] " Line ending for current file
+set statusline+=\ %l:%c " Line and column numbers
+set statusline+=\ %p%% " Percentage through file (in lines)
+set statusline+=\  " Trailing space
+
 " Open split views in correct directions
 set splitbelow
 set splitright
